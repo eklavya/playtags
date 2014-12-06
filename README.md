@@ -61,6 +61,42 @@ case class Test(name: String, password: String, age: Int, hobby: String, dob: Da
     )
   }
   ```
+Helpers
+=======
+You have all the usual elements you have in play templates:
+
+Convert your content to HTML to be sent to client. It adds <!DOCTYPE HTML> at the start.
+```scala
+def Html(tags: Modifier)
+```
+
+These are all the helpers.
+
+```scala
+def textArea
+
+def selectField
+
+def inputText
+
+def inputRadioGroup
+
+def inputDate
+
+def inputFile
+
+def inputPassword
+
+def checkBox
+
+def pForm
+```
+As shown in the example above, they all take a ``` play.api.data.Field``` and an optional attributes sequence.
+
+Note
+====
+To turn showing constraints on or off, you can specify ```"showConstraints".attr := "false/true"```
+
 License
 =======
 Apache 2.0
