@@ -96,7 +96,7 @@ object PlayTags {
             id := s"${iyd}_${v._1}",
             name := nme,
             value := v._1,
-            checked := chked)(label(`for` := s"${f.id}_${v._1}")(v._2))
+            checked := chked)(label(`for` := s"${iyd}_${v._1}")(v._2))
         })
     }
   }
