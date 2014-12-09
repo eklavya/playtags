@@ -3,6 +3,16 @@ PlayTags
 
 A Library to make play framework html helpers available for scalatags.
 Use scalatags with the same functionality you have come to expect from play templates.
+
+How To Use
+===========
+Add this to your dependencies -
+```scala
+"com.github.eklavya" %% "playtags" % "1.0"
+```
+
+Quick Example
+=============
   ```scala
 import java.util.Date  
 import playtags.PlayTags._
@@ -73,25 +83,21 @@ def Html(tags: Modifier)
 These are all the helpers.
 
 ```scala
-def textArea
+textArea
+selectField
+inputText
+inputRadioGroup
+inputDate
+inputFile
+inputPassword
+checkBox
+pForm
 
-def selectField
-
-def inputText
-
-def inputRadioGroup
-
-def inputDate
-
-def inputFile
-
-def inputPassword
-
-def checkBox
-
-def pForm
+requireJs
+jsloader
+javascriptRouter
 ```
-As shown in the example above, they all take a ``` play.api.data.Field``` and an optional attributes sequence.
+As shown in the example above, they all take a ``` play.api.data.Field``` and an optional attributes sequence. Except the last three javascript helpers which behave exactly like they do in play templates.
 
 Note
 ====
