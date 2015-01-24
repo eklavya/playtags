@@ -8,7 +8,7 @@ How To Use
 ===========
 Add this to your dependencies -
 ```scala
-"com.github.eklavya" %% "playtags" % "1.0"
+"com.github.eklavya" %% "playtags" % "1.1"
 ```
 
 Quick Example
