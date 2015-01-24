@@ -153,7 +153,7 @@ object PlayTags {
     val clss = attrs.find(_.a.name == "class").map(_.v).getOrElse("") + {
       if (f.hasErrors) " error" else ""
     }
-    val lbl = attrs.find(_.a.name == "label").getOrElse(play.api.i18n.Messages(f.label)).toString
+    val lbl = attrs.find(_.a.name == "label").map(_.v).getOrElse(play.api.i18n.Messages(f.label))
     val showConstraints = attrs.find(_.a.name == "showConstraints").map(_.v == "true").getOrElse(true)
 
     dl(cls := clss,
