@@ -4,8 +4,6 @@ PlayTags
 A Library to make play framework html helpers available for scalatags.
 Use scalatags with the same functionality you have come to expect from play templates.
 
-Note: If you want to convert an existing html file to scalatags, you may use https://gist.github.com/eklavya/241ddca476e0ea66f31c (should work for basic files).
-
 How To Use
 ===========
 Add this to your dependencies -
