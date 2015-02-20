@@ -10,14 +10,14 @@ object PlayTags {
 
   def Html(tags: Modifier) = "<!DOCTYPE html>" + tags.toString
 
-  def textArea(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def textArea(f: Field, attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       textarea(id := iyd, name := nme, attr)
     }
   }
 
-  def selectField(f: Field, options: Seq[(String, String)], attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def selectField(f: Field, options: Seq[(String, String)], attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
 
       val selectName = if (attr.exists(_.a.name == "multiple")) s"$nme[]" else nme
 
@@ -76,8 +76,8 @@ object PlayTags {
     script(`type` := "text/javascript")(raw(Html(play.api.Routes.javascriptRouter(name)(routes: _*).body.replace("/", "\\/")).toString()))
   }
 
-  def inputText(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def inputText(f: Field, attrs: AttrPair[Builder, String]*): Frag = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       val inputType = attrs.find(_.a.name == "type").map(_.v.toString).getOrElse("text")
       input(`type` := inputType,
         id := iyd,
@@ -87,8 +87,8 @@ object PlayTags {
     }
   }
 
-  def inputRadioGroup(f: Field, options: Seq[(String, String)], attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def inputRadioGroup(f: Field, options: Seq[(String, String)], attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       span(cls := "buttonset", id := iyd)(
         options.map { v =>
           val chked = if (valu == Some(v._1)) "checked" else ""
@@ -101,8 +101,8 @@ object PlayTags {
     }
   }
 
-  def inputDate(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) {
+  def inputDate(f: Field, attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) {
       (iyd, nme, valu, attr) =>
         input(`type` := "date",
           id := iyd,
@@ -112,8 +112,8 @@ object PlayTags {
     }
   }
 
-  def inputFile(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def inputFile(f: Field, attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       input(`type` := "file",
         id := iyd,
         name := nme,
@@ -121,8 +121,8 @@ object PlayTags {
     }
   }
 
-  def inputPassword(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) {
+  def inputPassword(f: Field, attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) {
       (iyd, nme, valu, attr) =>
         input(`type` := "password",
           id := iyd,
@@ -131,7 +131,7 @@ object PlayTags {
     }
   }
 
-  private def genInput(f: Field, attrs: Seq[AttrPair[Builder, String]])(fun: (String, String, Option[String], Seq[AttrPair[Builder, String]]) => Modifier) = {
+  private def genInput(f: Field, attrs: AttrPair[Builder, String]*)(fun: (String, String, Option[String], Seq[AttrPair[Builder, String]]) => Frag): Frag = {
 
     val iyd = attrs.find(_.a.name == "id").map(_.v).getOrElse(f.id)
 
@@ -141,25 +141,24 @@ object PlayTags {
         f.name,
         f.value,
         attrs.filterNot(ap =>
-          ap.a.name == "class" ||
+//          ap.a.name == "class" ||
             ap.a.name == "id" ||
             ap.a.name == "showConstraints" ||
-            ap.a.name == "name" ||
-            ap.a.name == "label")),
-      attrs)
+            ap.a.name == "name" //||
+//            ap.a.name == "label"
+        )),
+      attrs: _*)
   }
 
-  private def fieldConstructor(iyd: String, f: Field, inner: Modifier, attrs: Seq[AttrPair[Builder, String]]) = {
-    val clss = attrs.find(_.a.name == "class").map(_.v).getOrElse("") + {
-      if (f.hasErrors) " error" else ""
-    }
-    val lbl = attrs.find(_.a.name == "label").map(_.v).getOrElse(play.api.i18n.Messages(f.label))
-    val showConstraints = attrs.find(_.a.name == "showConstraints").map(_.v == "true").getOrElse(true)
+  private def fieldConstructor(iyd: String, f: Field, inner: Frag, attrs: AttrPair[Builder, String]*): Frag = {
+//    val clss = attrs.find(_.a.name == "class").map(_.v).getOrElse("") + {
+//      if (f.hasErrors) " error" else ""
+//    }
+//    val lbl = attrs.find(_.a.name == "label").map(_.v).getOrElse(play.api.i18n.Messages(f.label))
+    val showConstraints = attrs.find(_.a.name == "showConstraints").exists(_.v == "true")
 
-    dl(cls := clss,
-      id := iyd,
-      dt(label(`for` := iyd)(lbl)),
-      dd(inner),
+    span(
+      inner,
       f.errors.map(e => play.api.i18n.Messages(e.message, e.args: _*)).map(dd(cls := "error")(_)),
       (if (showConstraints) {
         f.constraints.map(c => play.api.i18n.Messages(c._1, c._2: _*)) ++
@@ -167,8 +166,8 @@ object PlayTags {
       } else Nil).map(dd(cls := "info")(_)))
   }
 
-  def checkBox(f: Field, attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def checkBox(f: Field, attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       val boxValue = attrs.find(_.a.name == "value").map(_.v).getOrElse("true")
       val chked = if (valu == Some(boxValue)) "checked" else ""
 
@@ -182,12 +181,12 @@ object PlayTags {
     }
   }
 
-  def pForm(a: Call, attrs: Seq[AttrPair[Builder, String]] = Seq())(body: Seq[Modifier]) = {
+  def pForm(a: Call, attrs: AttrPair[Builder, String]*)(body: Modifier*) = {
     form(action := a.url, method := a.method, attrs)(body)
   }
 
-  def inputCheckBoxGroup(f: Field, options: Seq[(String, String)], attrs: Seq[AttrPair[Builder, String]] = Seq()) = {
-    genInput(f, attrs) { (iyd, nme, valu, attr) =>
+  def inputCheckBoxGroup(f: Field, options: Seq[(String, String)], attrs: AttrPair[Builder, String]*) = {
+    genInput(f, attrs: _*) { (iyd, nme, valu, attr) =>
       val values = f.indexes.map(i => f(s"[$i]").value).flatten.toSet
 
       span(cls := "buttonset",

@@ -1,8 +1,13 @@
+import SonatypeKeys._
+
+// Import default settings. This changes `publishTo` settings to use the Sonatype repository and add several commands for publishing.
+xerial.sbt.Sonatype.sonatypeSettings
+
 name := """playtags"""
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.5"
 
 crossScalaVersions := Seq("2.10.4", scalaVersion.value)
 
@@ -10,6 +15,10 @@ libraryDependencies ++= Seq(
   "com.scalatags" %% "scalatags" % "0.4.2",
   "com.typesafe.play" %% "play" % "2.3.7"
 )
+
+profileName := "com.github.eklavya"
+
+organization := "com.github.eklavya"
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
