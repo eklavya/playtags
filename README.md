@@ -44,7 +44,7 @@ case class Test(name: String, password: String, age: Int, hobby: String, dob: Da
 
   def testPage(tf: Form[Test]) = div(
     textarea(),
-    pForm(routes.Application.test)(Seq(
+    pForm(routes.Application.test)(
       inputText(tf("Name"), cls := "myclass", id := "myNameId", "showConstraints".attr := "false"),
       inputPassword(tf("Password"), cls := "myclass", id := "myPassId"),
       inputText(tf("Age")),
@@ -54,7 +54,7 @@ case class Test(name: String, password: String, age: Int, hobby: String, dob: Da
       textArea(tf("Note"), value := "Hello World!"),
       checkBox(tf("Agree to T&Cs")),
       input(`type` := "submit", method := "POST")
-    ))
+    )
   )
 
   def index = Action {
