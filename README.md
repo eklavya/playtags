@@ -4,6 +4,12 @@ PlayTags
 A Library to make play framework html helpers available for scalatags.
 Use scalatags with the same functionality you have come to expect from play templates.
 
+Changelog
+=========
+1.1
+- more stylable
+- no more Seq, just pile on the args (see below for example)
+
 How To Use
 ===========
 Add this to your dependencies -
@@ -39,13 +45,13 @@ case class Test(name: String, password: String, age: Int, hobby: String, dob: Da
   def testPage(tf: Form[Test]) = div(
     textarea(),
     pForm(routes.Application.test)(Seq(
-      inputText(tf("Name"), Seq(cls := "myclass", id := "myNameId", "showConstraints".attr := "false")),
-      inputPassword(tf("Password"), Seq(cls := "myclass", id := "myPassId")),
+      inputText(tf("Name"), cls := "myclass", id := "myNameId", "showConstraints".attr := "false"),
+      inputPassword(tf("Password"), cls := "myclass", id := "myPassId"),
       inputText(tf("Age")),
-      selectField(tf("Hobby"), Seq("S" -> "Swimming", "C" -> "Cycling"), Seq(cls := "myclass", id := "myHobbyId")),
+      selectField(tf("Hobby"), Seq("S" -> "Swimming", "C" -> "Cycling"), cls := "myclass", id := "myHobbyId"),
       inputDate(tf("Date of Birth")),
       inputRadioGroup(tf("Job"), Seq("E" -> "Designer", "D" -> "Developer", "H" -> "Hacker")),
-      textArea(tf("Note"), Seq(value := "Hello World!")),
+      textArea(tf("Note"), value := "Hello World!"),
       checkBox(tf("Agree to T&Cs")),
       input(`type` := "submit", method := "POST")
     ))
